@@ -4,11 +4,21 @@ using UnityEngine;
 
 public class inimigo_behavior : MonoBehaviour
 {
-   private Rigidbody2D rb;
+    //mariana=contagem
+    public enum lado {cima, esquerda, direita};
+    public static lado lTiro;
+
+    private Rigidbody2D rb;
     private Transform tr;
     private Animator an;
     public Transform verificaChao;
     public Transform verificaParede;
+
+    private float relogio = 1f;
+    private float mariana;
+
+    [SerializeField]
+    private GameObject pipoco;
 
     public float velocidade;
     public float raioVchao;
@@ -78,11 +88,29 @@ public class inimigo_behavior : MonoBehaviour
         Gizmos.DrawWireSphere(verificaParede.position, raioVp);
     }
 
-    void tiro()
-
+    void OnTriggerStay2D(Collider2D bateu)
     {
-      
-     
+        if(bateu.tag == "Player")
+        {
+            if (bateu.transform.position.y > transform.position.y+1)
+            {
+                lTiro = lado.cima;
+            }
+            else if(bateu.transform.position.x > transform.position.x)
+            {
+                lTiro = lado.direita;
+            }
+            else if (bateu.transform.position.x < transform.position.x)
+            {
+                lTiro = lado.esquerda;
+            }
+
+            if(Time.time > mariana)
+            {
+                mariana = Time.time + relogio;
+                Instantiate(pipoco, transform.position, Quaternion.identity);
+            }
+        }
 
     }
     
