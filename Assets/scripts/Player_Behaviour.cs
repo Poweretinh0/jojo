@@ -1,4 +1,4 @@
-﻿ using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,18 +13,22 @@ public class Player_Behaviour : MonoBehaviour
     public Transform verificaParede;
 
     private bool estaAndando;
-    public bool estaNoChao;
+    public bool estaPulando;
+    private bool estaNoChao;
     private bool estaNaParede;
     private bool estaVivo;
     private bool viradoParaDireita;
-    
+
 
     private float axis;
 
+    public static int pontos;
     public float velocidade;
     public float forcaPulo;
     public float raioVchao;
     public float raioVp;
+
+    public float doubleJump;
 
     public LayerMask solido;
 
@@ -43,37 +47,59 @@ public class Player_Behaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+
         estaNoChao = Physics2D.OverlapCircle(verificaChao.position, raioVchao, solido);
         estaNaParede = Physics2D.OverlapCircle(verificaParede.position, raioVp, solido);
 
-       
+
 
         if (estaVivo)
         {
-           
+
             axis = Input.GetAxisRaw("Horizontal");
 
             estaAndando = Mathf.Abs(axis) > 0f;
 
-          
             if (axis > 0f && !viradoParaDireita)
                 flip();
 
             else if (axis < 0f && viradoParaDireita)
+
                 flip();
 
+
+
+
             if (Input.GetButtonDown("Jump") && estaNoChao)
+            {
                 rb.AddForce(tr.up * forcaPulo);
-                       
+
+                estaPulando = true;
+
+                estaNoChao = false;
+
+            }
+
+            else if (Input.GetButtonDown("Jump") && estaPulando)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 0f);
+                rb.AddForce(tr.up * forcaPulo);
+
+
+                estaPulando = false;
+
+            }
+
+
+
 
             Animations();
         }
-        
+
     }
     void FixedUpdate()
     {
-                          
+
 
         if (estaAndando && !estaNaParede)
         {
@@ -109,14 +135,17 @@ public class Player_Behaviour : MonoBehaviour
 
     }
 
-   void OnDrawGizmosSelected()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        Gizmos.color = Color.red;
-
-        Gizmos.DrawWireSphere(verificaChao.position, raioVchao);
-        Gizmos.DrawWireSphere(verificaParede.position, raioVp );
-
+        if (collision.tag == "cristal")
+        {
+            pontos++;
+        }
 
     }
+
+
+
 }
+
 
