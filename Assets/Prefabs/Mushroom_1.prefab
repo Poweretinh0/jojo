@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9151881010052155543}
   m_Layer: 0
   m_Name: Mushroom_1
-  m_TagString: Untagged
+  m_TagString: Pipoco
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

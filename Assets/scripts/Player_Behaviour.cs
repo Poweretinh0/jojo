@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player_Behaviour : MonoBehaviour
 {
-
+    [SerializeField] bool imune;
+    [SerializeField] float CD;
+    private float CDP;
     private Rigidbody2D rb;
     private Transform tr;
     private Animator an;
@@ -32,6 +35,9 @@ public class Player_Behaviour : MonoBehaviour
 
     public LayerMask solido;
 
+    [SerializeField]bool[] VidasB;
+    [SerializeField]Image[] Vidas; 
+
     // Start is called before the first frame update
     void Start()
 
@@ -51,7 +57,7 @@ public class Player_Behaviour : MonoBehaviour
         estaNoChao = Physics2D.OverlapCircle(verificaChao.position, raioVchao, solido);
         estaNaParede = Physics2D.OverlapCircle(verificaParede.position, raioVp, solido);
 
-
+        CDP += Time.deltaTime;
 
         if (estaVivo)
         {
@@ -141,11 +147,25 @@ public class Player_Behaviour : MonoBehaviour
         {
             pontos++;
         }
-
+        if(collision.tag == "Pipoco")
+        {
+            for (int i = 0; i < Vidas.Length; i++)
+            {
+                if (VidasB[i])
+                {
+                    VidasB[i] = false;
+                    Vidas[i].color = new Color(Vidas[i].color.r, Vidas[i].color.g, Vidas[i].color.b, 0.15f);
+                    imune = false;
+                    break;
+                }
+            }
+        }
     }
-
-
-
+    private void imune()
+    {
+        CDP = 0;
+        
+    }
 }
 
 
