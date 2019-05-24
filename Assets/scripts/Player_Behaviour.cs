@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Player_Behaviour : MonoBehaviour
 {
-    [SerializeField] bool imune;
+    [SerializeField] private bool imune;
     [SerializeField] float CD;
     private float CDP;
     private Rigidbody2D rb;
@@ -147,25 +147,31 @@ public class Player_Behaviour : MonoBehaviour
         {
             pontos++;
         }
-        if(collision.tag == "Pipoco")
+        if (collision.tag == "Pipoco")
         {
-            for (int i = 0; i < Vidas.Length; i++)
+            if (!imune)
             {
-                if (VidasB[i])
+                for (int i = 0; i < Vidas.Length; i++)
                 {
-                    VidasB[i] = false;
-                    Vidas[i].color = new Color(Vidas[i].color.r, Vidas[i].color.g, Vidas[i].color.b, 0.15f);
-                    imune = false;
-                    break;
+                    if (VidasB[i])
+                    {
+                        VidasB[i] = false;
+                        Vidas[i].color = new Color(Vidas[i].color.r, Vidas[i].color.g, Vidas[i].color.b,0.2f);
+                        imune = true;
+                        StartCoroutine(imunidade(2000f));
+                        break;
+                    }
                 }
             }
         }
     }
-    private void imune()
-    {
-        CDP = 0;
-        
+        private IEnumerator imunidade(float time)
+        {
+            new WaitForSeconds(time);
+            yield return imune = false;
+
+        }
     }
-}
+
 
 
