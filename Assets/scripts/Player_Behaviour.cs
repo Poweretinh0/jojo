@@ -145,7 +145,8 @@ public class Player_Behaviour : MonoBehaviour
     {
         if (collision.tag == "cristal")
         {
-            pontos++;
+            cristais.cristal++;
+            Destroy(collision.gameObject);
         }
         if (collision.tag == "Pipoco")
         {
